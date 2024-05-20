@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Pagos360ApiClientLibrary.Model;
+using Pagos360ApiClientLibrary.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Pagos360ApiClientLibrary.Model;
-using Pagos360ApiClientLibrary.Services;
 
 namespace Pagos360ApiClientLibrary.Resources
 {
@@ -12,7 +12,8 @@ namespace Pagos360ApiClientLibrary.Resources
     {
         public static PaginationResult<DebitRequest> ListDebitRequests(string pPath, string pAPIKey)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.ListObjects<DebitRequest>(pPath + "/debit-request", pAPIKey);
             }
             catch (ApplicationException ae)
@@ -23,7 +24,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static PaginationResult<DebitRequest> ListDebitRequests(string pPath, string pAPIKey, string pExternalReference)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.ListObjects<DebitRequest>(pPath + "/debit-request?external_reference=" + pExternalReference, pAPIKey);
             }
             catch (ApplicationException ae)
@@ -34,7 +36,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static DebitRequest CreateDebitRequest(string pPath, string pAPIKey, DebitRequest pDebitRequest)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.CreateObject<DebitRequest>(pPath + "/debit-request", pAPIKey, "debit_request", pDebitRequest);
             }
             catch (ApplicationException ae)
@@ -45,7 +48,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static DebitRequest GetDebitRequest(string pPath, string pAPIKey, int pId)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.GetObject<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)
@@ -56,7 +60,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static DebitRequest CancelDebitRequest(string pPath, string pAPIKey, int pId)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.CancelObject<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)

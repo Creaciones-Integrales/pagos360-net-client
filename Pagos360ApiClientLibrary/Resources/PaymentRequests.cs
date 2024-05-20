@@ -1,6 +1,6 @@
-﻿using System;
-using Pagos360ApiClientLibrary.Model;
+﻿using Pagos360ApiClientLibrary.Model;
 using Pagos360ApiClientLibrary.Services;
+using System;
 
 namespace Pagos360ApiClientLibrary.Resources
 {
@@ -8,7 +8,8 @@ namespace Pagos360ApiClientLibrary.Resources
     {
         public static PaginationResult<PaymentRequest> ListPaymentRequests(string pPath, string pAPIKey)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.ListObjects<PaymentRequest>(pPath + "/payment-request", pAPIKey);
             }
             catch (ApplicationException ae)
@@ -19,7 +20,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static PaymentRequest CreatePaymentRequest(string pPath, string pAPIKey, string? pConnectAccount, PaymentRequest pPaymentRequest)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.CreateObject<PaymentRequest>(pPath + "/payment-request", pAPIKey, pConnectAccount, "payment_request", pPaymentRequest);
             }
             catch (ApplicationException ae)
@@ -30,7 +32,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static PaymentRequest GetPaymentRequest(string pPath, string pAPIKey, int pPaymentId)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.GetObject<PaymentRequest>(pPath + "/payment-request", pAPIKey, pPaymentId);
             }
             catch (ApplicationException ae)

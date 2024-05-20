@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Pagos360ApiClientLibrary.Model;
+using Pagos360ApiClientLibrary.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Pagos360ApiClientLibrary.Model;
-using Pagos360ApiClientLibrary.Services;
 
 namespace Pagos360ApiClientLibrary.Resources
 {
@@ -24,8 +24,9 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static Adhesion CreateAdhesion(string pPath, string pAPIKey, Adhesion pAdhesion, bool pAutoSign)
         {
-            try {
-                string autoSign = "";            
+            try
+            {
+                string autoSign = "";
                 return ApiRestServices.CreateObject<Adhesion>(pPath + "/adhesion" + autoSign, pAPIKey, "adhesion", pAdhesion);
             }
             catch (ApplicationException ae)
@@ -36,7 +37,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static Adhesion GetAdhesion(string pPath, string pAPIKey, int pId)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.GetObject<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
@@ -49,7 +51,7 @@ namespace Pagos360ApiClientLibrary.Resources
         {
             try
             {
-                return ApiRestServices.CancelObject<Adhesion>(pPath + "/adhesion", pAPIKey, pId);            
+                return ApiRestServices.CancelObject<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {

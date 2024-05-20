@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Pagos360ApiClientLibrary.Model;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
-using Pagos360ApiClientLibrary.Model;
 
 namespace Pagos360ApiClientLibrary.Model
 {
@@ -10,7 +10,7 @@ namespace Pagos360ApiClientLibrary.Model
     public class CardDebitRequest
     {
         public CardDebitRequest() { }
-        
+
         [DataMember(Name = "id", EmitDefaultValue = false)]
         public int Id { get; set; }
 

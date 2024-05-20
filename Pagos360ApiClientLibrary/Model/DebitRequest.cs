@@ -37,13 +37,13 @@ namespace Pagos360ApiClientLibrary.Model
 
         [DataMember(Name = "description")]
         public string Description { get; set; }
-        
+
         [DataMember(Name = "adhesion", EmitDefaultValue = false)]
         public Adhesion Adhesion { get; set; }
-        
+
         [DataMember(Name = "adhesion_id")]
         public int AdhesionId { get; set; }
-        
+
         [DataMember(Name = "request_result", EmitDefaultValue = false)]
         public List<RequestResult> RequestResult { get; set; }
     }

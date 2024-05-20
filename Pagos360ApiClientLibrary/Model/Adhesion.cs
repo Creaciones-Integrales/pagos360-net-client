@@ -24,7 +24,7 @@ namespace Pagos360ApiClientLibrary.Model
 
         [DataMember(Name = "adhesion_holder_name")]
         public string AdhesionHolderName { get; set; }
-        
+
         [DataMember(Name = "bank", EmitDefaultValue = false)]
         public string Bank { get; set; }
 

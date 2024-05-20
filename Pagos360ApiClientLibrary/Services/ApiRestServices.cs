@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using Pagos360ApiClientLibrary.Model;
+using System;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
-using Pagos360ApiClientLibrary.Model;
+using System.Text;
 
 namespace Pagos360ApiClientLibrary.Services
 {
@@ -22,7 +22,7 @@ namespace Pagos360ApiClientLibrary.Services
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-                
+
                 var response = client.GetAsync(pPath).Result;
 
                 if (response.IsSuccessStatusCode)
@@ -58,7 +58,7 @@ namespace Pagos360ApiClientLibrary.Services
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = client.PostAsync(pPath, httpContent).Result;
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     var streamTask = response.Content.ReadAsStreamAsync().Result;
@@ -73,7 +73,7 @@ namespace Pagos360ApiClientLibrary.Services
             }
         }
 
-         public static T CreateObject<T>(string pPath, string pAPIKey, string? pConnectAccount, string rootName, T pObject) where T : class
+        public static T CreateObject<T>(string pPath, string pAPIKey, string? pConnectAccount, string rootName, T pObject) where T : class
         {
             using (HttpClient client = new HttpClient())
             {
@@ -85,7 +85,7 @@ namespace Pagos360ApiClientLibrary.Services
                     new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
 
-                if(pConnectAccount != null) client.DefaultRequestHeaders.Add("X-Connect-Account",pConnectAccount);
+                if (pConnectAccount != null) client.DefaultRequestHeaders.Add("X-Connect-Account", pConnectAccount);
 
                 serializer.WriteObject(streamObjet, pObject);
                 streamObjet.Position = 0;
@@ -94,7 +94,7 @@ namespace Pagos360ApiClientLibrary.Services
                 var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = client.PostAsync(pPath, httpContent).Result;
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     var streamTask = response.Content.ReadAsStreamAsync().Result;
@@ -159,7 +159,7 @@ namespace Pagos360ApiClientLibrary.Services
                 {
                     string message = GetErrorMessage(response);
                     throw new ApplicationException(message);
-                }                
+                }
             }
         }
 
@@ -188,7 +188,7 @@ namespace Pagos360ApiClientLibrary.Services
                 }
             }
         }
-        
+
         public static string GetFirstDudeDate<T>(string pPath, string pAPIKey, string rootName, T pObject) where T : class
         {
             using (HttpClient client = new HttpClient())

@@ -23,7 +23,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static CardAdhesion CreateAdhesion(string pPath, string pAPIKey, CardAdhesion pAdhesion, bool pAutoSign)
         {
-            try {
+            try
+            {
                 string autoSign = "";
                 return ApiRestServices.CreateObject<CardAdhesion>(pPath + "/card-adhesion" + autoSign, pAPIKey, "card_adhesion", pAdhesion);
             }
@@ -35,7 +36,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static CardAdhesion GetAdhesion(string pPath, string pAPIKey, int pId)
         {
-            try { 
+            try
+            {
                 return ApiRestServices.GetObject<CardAdhesion>(pPath + "/card-adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
@@ -46,7 +48,8 @@ namespace Pagos360ApiClientLibrary.Resources
 
         public static CardAdhesion CancelAdhesion(string pPath, string pAPIKey, int pId)
         {
-            try {
+            try
+            {
                 return ApiRestServices.CancelObject<CardAdhesion>(pPath + "/card-adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
