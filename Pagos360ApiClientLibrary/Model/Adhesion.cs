@@ -1,52 +1,54 @@
-﻿using System.Runtime.Serialization;
-
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Pagos360ApiClientLibrary.Model
 {
-    [DataContract(Name = "adhesion")]
     public class Adhesion
     {
         public Adhesion() { }
 
-        [DataMember(Name = "id", EmitDefaultValue = false)]
-        public int Id { get; set; }
+        [JsonPropertyName("id")]
+        public int? Id { get; set; }
 
-        [DataMember(Name = "state", EmitDefaultValue = false)]
-        public string State { get; set; }
+        [JsonPropertyName("state")]
+        public string? State { get; set; }
 
-        [DataMember(Name = "state_comment", EmitDefaultValue = false)]
-        public string StateComment { get; set; }
+        [JsonPropertyName("state_comment")]
+        public string? StateComment { get; set; }
 
-        [DataMember(Name = "created_at", EmitDefaultValue = false)]
-        public string CreatedAt { get; set; }
+        [JsonPropertyName("created_at")]
+        public string? CreatedAt { get; set; }
 
-        [DataMember(Name = "canceled_at", EmitDefaultValue = false)]
-        public string CanceledAt { get; set; }
+        [JsonPropertyName("canceled_at")]
+        public string? CanceledAt { get; set; }
 
-        [DataMember(Name = "adhesion_holder_name")]
-        public string AdhesionHolderName { get; set; }
+        [JsonPropertyName("adhesion_holder_name")]
+        public required string AdhesionHolderName { get; set; }
 
-        [DataMember(Name = "bank", EmitDefaultValue = false)]
-        public string Bank { get; set; }
+        [JsonPropertyName("bank")]
+        public string? Bank { get; set; }
 
-        [DataMember(Name = "cbu_holder_id_number")]
-        public long CbuHolderIdNumber { get; set; }
+        [JsonPropertyName("cbu_holder_id_number")]
+        public required long CbuHolderIdNumber { get; set; }
 
-        [DataMember(Name = "cbu_holder_name")]
-        public string CbuHolderName { get; set; }
+        [JsonPropertyName("cbu_holder_name")]
+        public required string CbuHolderName { get; set; }
 
-        [DataMember(Name = "cbu_number")]
-        public string CbuNumber { get; set; }
+        [JsonPropertyName("cbu_number")]
+        public required string CbuNumber { get; set; }
 
-        [DataMember(Name = "description")]
-        public string Description { get; set; }
+        [JsonPropertyName("description")]
+        public required string Description { get; set; }
 
-        [DataMember(Name = "short_description")]
-        public string ShortDescription { get; set; }
+        [JsonPropertyName("short_description")]
+        public required string ShortDescription { get; set; }
 
-        [DataMember(Name = "email")]
-        public string Email { get; set; }
+        [JsonPropertyName("email")]
+        public required string Email { get; set; }
 
-        [DataMember(Name = "external_reference")]
-        public string ExternalReference { get; set; }
+        [JsonPropertyName("external_reference")]
+        public required string ExternalReference { get; set; }
+
+        [JsonPropertyName("metadata")]
+        public JsonElement? Metadata { get; set; }
     }
 }

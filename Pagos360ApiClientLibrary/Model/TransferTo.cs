@@ -1,26 +1,25 @@
-using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Pagos360ApiClientLibrary.Model
 {
-    [DataContract(Name = "transfer_to")]
     public class TransferTo
     {
         public TransferTo() { }
 
-        [DataMember(Name = "account_id", EmitDefaultValue = false)]
-        public string AccountId { get; set; }
+        [JsonPropertyName("account_id")]
+        public string? AccountId { get; set; }
 
-        [DataMember(Name = "amount")]
-        public double Amount { get; set; }
+        [JsonPropertyName("amount")]
+        public double? Amount { get; set; }
 
-        [DataMember(Name = "description", EmitDefaultValue = false)]
-        public string Description { get; set; }
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
 
-        [DataMember(Name = "external_reference", EmitDefaultValue = false)]
-        public string ExternalReference { get; set; }
+        [JsonPropertyName("external_reference")]
+        public string? ExternalReference { get; set; }
 
-        [DataMember(Name = "refundable", EmitDefaultValue = false)]
-        public bool Refundable { get; set; }
-
+        [JsonPropertyName("refundable")]
+        public bool? Refundable { get; set; }
     }
 }

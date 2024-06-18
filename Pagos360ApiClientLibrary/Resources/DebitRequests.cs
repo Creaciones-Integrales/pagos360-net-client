@@ -10,11 +10,11 @@ namespace Pagos360ApiClientLibrary.Resources
 {
     public class DebitRequests
     {
-        public static PaginationResult<DebitRequest> ListDebitRequests(string pPath, string pAPIKey)
+        public static async Task<PaginationResult<DebitRequest>> ListDebitRequestsAsync(string pPath, string pAPIKey)
         {
             try
             {
-                return ApiRestServices.ListObjects<DebitRequest>(pPath + "/debit-request", pAPIKey);
+                return await ApiRestServices.ListObjectsAsync<DebitRequest>(pPath + "/debit-request", pAPIKey);
             }
             catch (ApplicationException ae)
             {
@@ -22,11 +22,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static PaginationResult<DebitRequest> ListDebitRequests(string pPath, string pAPIKey, string pExternalReference)
+        public static async Task<PaginationResult<DebitRequest>> ListDebitRequestsAsync(string pPath, string pAPIKey, string pExternalReference)
         {
             try
             {
-                return ApiRestServices.ListObjects<DebitRequest>(pPath + "/debit-request?external_reference=" + pExternalReference, pAPIKey);
+                return await ApiRestServices.ListObjectsAsync<DebitRequest>(pPath + "/debit-request?external_reference=" + pExternalReference, pAPIKey);
             }
             catch (ApplicationException ae)
             {
@@ -34,11 +34,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static DebitRequest CreateDebitRequest(string pPath, string pAPIKey, DebitRequest pDebitRequest)
+        public static async Task<DebitRequest> CreateDebitRequestAsync(string pPath, string pAPIKey, DebitRequest pDebitRequest)
         {
             try
             {
-                return ApiRestServices.CreateObject<DebitRequest>(pPath + "/debit-request", pAPIKey, "debit_request", pDebitRequest);
+                return await ApiRestServices.CreateObjectAsync<DebitRequest>(pPath + "/debit-request", pAPIKey, "debit_request", pDebitRequest);
             }
             catch (ApplicationException ae)
             {
@@ -46,11 +46,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static DebitRequest GetDebitRequest(string pPath, string pAPIKey, int pId)
+        public static async Task<DebitRequest> GetDebitRequestAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.GetObject<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
+                return await ApiRestServices.GetObjectAsync<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {
@@ -58,11 +58,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static DebitRequest CancelDebitRequest(string pPath, string pAPIKey, int pId)
+        public static async Task<DebitRequest> CancelDebitRequestAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.CancelObject<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
+                return await ApiRestServices.CancelObjectAsync<DebitRequest>(pPath + "/debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {
@@ -70,9 +70,9 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static string GetNextBusinessDay(string pPath, string pAPIKey, BusinessDay pDebitRequest)
+        public static async Task<string> GetNextBusinessDayAsync(string pPath, string pAPIKey, BusinessDay pDebitRequest)
         {
-            return ApiRestServices.GetFirstDudeDate<BusinessDay>(pPath + "/validator/next-business-day", pAPIKey, "next_business_day", pDebitRequest);
+            return await ApiRestServices.GetFirstDudeDateAsync<BusinessDay>(pPath + "/validator/next-business-day", pAPIKey, "next_business_day", pDebitRequest);
         }
     }
 }

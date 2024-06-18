@@ -1,227 +1,200 @@
 ﻿using Pagos360ApiClientLibrary.Model;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.IO;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Pagos360ApiClientLibrary.Services
 {
     public static class ApiRestServices
     {
-        public static PaginationResult<T> ListObjects<T>(string pPath, string pAPIKey)
+        private static readonly JsonSerializerOptions jsonSerializerOptions = new()
         {
-            using (HttpClient client = new HttpClient())
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+
+        public static async Task<PaginationResult<T>> ListObjectsAsync<T>(string pPath, string pAPIKey)
+        {
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            var response = await client.GetAsync(pPath);
+
+            if (response.IsSuccessStatusCode)
             {
-                var serializer = new DataContractJsonSerializer(typeof(PaginationResult<T>));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                var response = client.GetAsync(pPath).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjets = serializer.ReadObject(streamTask) as PaginationResult<T>;
-                    return responseObjets;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObjects = (await JsonSerializer.DeserializeAsync<PaginationResult<T>>(streamTask, jsonSerializerOptions))!;
+                return responseObjects;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static T CreateObject<T>(string pPath, string pAPIKey, string rootName, T pObject) where T : class
+        public static async Task<T> CreateObjectAsync<T>(string pPath, string pAPIKey, string rootName, T pObject) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            string json = JsonSerializer.Serialize(pObject, jsonSerializerOptions);
+            json = "{ \"" + rootName + "\": " + json + "}";
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(pPath, httpContent);
+
+            if (response.IsSuccessStatusCode)
             {
-                MemoryStream streamObjet = new MemoryStream();
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                serializer.WriteObject(streamObjet, pObject);
-                streamObjet.Position = 0;
-                StreamReader sr = new StreamReader(streamObjet);
-                string json = "{ \"" + rootName + "\": " + sr.ReadToEnd() + "}";
-                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = client.PostAsync(pPath, httpContent).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjet = serializer.ReadObject(streamTask) as T;
-                    return responseObjet;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObject = (await JsonSerializer.DeserializeAsync<T>(streamTask, jsonSerializerOptions))!;
+                return responseObject;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static T CreateObject<T>(string pPath, string pAPIKey, string? pConnectAccount, string rootName, T pObject) where T : class
+        public static async Task<T> CreateObjectWithAccountAsync<T>(string pPath, string pAPIKey, string? pConnectAccount, string rootName, T pObject) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            if (pConnectAccount != null) client.DefaultRequestHeaders.Add("X-Connect-Account", pConnectAccount);
+
+            string json = JsonSerializer.Serialize(pObject, jsonSerializerOptions);
+            json = "{ \"" + rootName + "\": " + json + "}";
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(pPath, httpContent);
+
+            if (response.IsSuccessStatusCode)
             {
-                MemoryStream streamObjet = new MemoryStream();
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                if (pConnectAccount != null) client.DefaultRequestHeaders.Add("X-Connect-Account", pConnectAccount);
-
-                serializer.WriteObject(streamObjet, pObject);
-                streamObjet.Position = 0;
-                StreamReader sr = new StreamReader(streamObjet);
-                string json = "{ \"" + rootName + "\": " + sr.ReadToEnd() + "}";
-                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = client.PostAsync(pPath, httpContent).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjet = serializer.ReadObject(streamTask) as T;
-                    return responseObjet;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObject = (await JsonSerializer.DeserializeAsync<T>(streamTask, jsonSerializerOptions))!;
+                return responseObject;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static T GetObject<T>(string pPath, string pAPIKey, int pId) where T : class
+        public static async Task<T> GetObjectAsync<T>(string pPath, string pAPIKey, int pId) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            var response = await client.GetAsync(pPath + "/" + pId);
+
+            if (response.IsSuccessStatusCode)
             {
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                var response = client.GetAsync(pPath + "/" + pId).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjets = serializer.ReadObject(streamTask) as T;
-                    return responseObjets;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObjects = (await JsonSerializer.DeserializeAsync<T>(streamTask, jsonSerializerOptions))!;
+                return responseObjects;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static T DeletObject<T>(string pPath, string pAPIKey, int pId) where T : class
+        public static async Task<T> DeleteObjectAsync<T>(string pPath, string pAPIKey, int pId) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            var response = await client.DeleteAsync(pPath + "/" + pId);
+
+            if (response.IsSuccessStatusCode)
             {
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                var response = client.DeleteAsync(pPath + "/" + pId).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjet = serializer.ReadObject(streamTask) as T;
-                    return responseObjet;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObject = (await JsonSerializer.DeserializeAsync<T>(streamTask, jsonSerializerOptions))!;
+                return responseObject;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static T CancelObject<T>(string pPath, string pAPIKey, int pId) where T : class
+        public static async Task<T> CancelObjectAsync<T>(string pPath, string pAPIKey, int pId) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            var response = await client.PutAsync(pPath + "/" + pId + "/cancel", null);
+            if (response.IsSuccessStatusCode)
             {
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                var response = client.PutAsync(pPath + "/" + pId + "/cancel", null).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var streamTask = response.Content.ReadAsStreamAsync().Result;
-                    var responseObjet = serializer.ReadObject(streamTask) as T;
-                    return responseObjet;
-                }
-                else
-                {
-                    string message = GetErrorMessage(response);
-                    throw new ApplicationException(message);
-                }
+                var streamTask = await response.Content.ReadAsStreamAsync();
+                var responseObject = (await JsonSerializer.DeserializeAsync<T>(streamTask, jsonSerializerOptions))!;
+                return responseObject;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        public static string GetFirstDudeDate<T>(string pPath, string pAPIKey, string rootName, T pObject) where T : class
+        public static async Task<string> GetFirstDudeDateAsync<T>(string pPath, string pAPIKey, string rootName, T pObject) where T : class
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new();
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
+
+            string json = JsonSerializer.Serialize(new { Property = rootName, Value = pObject }, jsonSerializerOptions);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(pPath, httpContent);
+            if (response.IsSuccessStatusCode)
             {
-                MemoryStream streamObjet = new MemoryStream();
-                var serializer = new DataContractJsonSerializer(typeof(T));
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", pAPIKey);
-
-                serializer.WriteObject(streamObjet, pObject);
-                streamObjet.Position = 0;
-                StreamReader sr = new StreamReader(streamObjet);
-                string json = "{ \"" + rootName + "\": " + sr.ReadToEnd() + "}";
-                var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                var response = client.PostAsync(pPath, httpContent).Result.Content.ReadAsStringAsync();
-                return response.Result;
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
+            }
+            else
+            {
+                string message = await GetErrorMessageAsync(response);
+                throw new ApplicationException(message);
             }
         }
 
-        private static string GetErrorMessage(HttpResponseMessage response)
-        {
-            string errorResult = response.Content.ReadAsStringAsync().Result;
 
-            String startString = "\"errors\":[";
-            String endString = "]";
+        private static async Task<string> GetErrorMessageAsync(HttpResponseMessage response)
+        {
+            string errorResult = await response.Content.ReadAsStringAsync();
+
+            string startString = "\"errors\":[";
+            string endString = "]";
 
             int startIndex = errorResult.IndexOf(startString);
-            int endIndex = errorResult.IndexOf(endString);
-            string message = errorResult.Substring(startIndex + 11, endIndex - (startIndex + 11));
+            if (startIndex == -1) return "Error parsing error message."; // Added check for -1 return value
+
+            int endIndex = errorResult.IndexOf(endString, startIndex);
+            if (endIndex == -1) return "Error parsing error message."; // Added check for -1 return value
+
+            string message = errorResult.Substring(startIndex + startString.Length, endIndex - (startIndex + startString.Length));
 
             return message;
         }

@@ -1,50 +1,53 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Pagos360ApiClientLibrary.Model
 {
-    [DataContract(Name = "debit_request")]
     public class DebitRequest
     {
         public DebitRequest() { }
 
-        [DataMember(Name = "id", EmitDefaultValue = false)]
-        public int Id { get; set; }
+        [JsonPropertyName("id")]
+        public int? Id { get; set; }
 
-        [DataMember(Name = "type", EmitDefaultValue = false)]
-        public string Type { get; set; }
+        [JsonPropertyName("type")]
+        public string? Type { get; set; }
 
-        [DataMember(Name = "state", EmitDefaultValue = false)]
-        public string State { get; set; }
+        [JsonPropertyName("state")]
+        public string? State { get; set; }
 
-        [DataMember(Name = "state_comment", EmitDefaultValue = false)]
-        public string StateComment { get; set; }
+        [JsonPropertyName("state_comment")]
+        public string? StateComment { get; set; }
 
-        [DataMember(Name = "created_at", EmitDefaultValue = false)]
-        public string CreatedAt { get; set; }
+        [JsonPropertyName("created_at")]
+        public string? CreatedAt { get; set; }
 
-        [DataMember(Name = "first_due_date")]
-        public string FirstDueDate { get; set; }
+        [JsonPropertyName("first_due_date")]
+        public required string FirstDueDate { get; set; }
 
-        [DataMember(Name = "first_total")]
-        public double FirstTotal { get; set; }
+        [JsonPropertyName("first_total")]
+        public required float FirstTotal { get; set; }
 
-        [DataMember(Name = "second_due_date", EmitDefaultValue = false)]
-        public string SecondDueDate { get; set; }
+        [JsonPropertyName("second_due_date")]
+        public string? SecondDueDate { get; set; }
 
-        [DataMember(Name = "second_total", EmitDefaultValue = false)]
-        public double SecondTotal { get; set; }
+        [JsonPropertyName("second_total")]
+        public float? SecondTotal { get; set; }
 
-        [DataMember(Name = "description")]
-        public string Description { get; set; }
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
 
-        [DataMember(Name = "adhesion", EmitDefaultValue = false)]
-        public Adhesion Adhesion { get; set; }
+        [JsonPropertyName("adhesion")]
+        public Adhesion? Adhesion { get; set; }
 
-        [DataMember(Name = "adhesion_id")]
-        public int AdhesionId { get; set; }
+        [JsonPropertyName("adhesion_id")]
+        public required int AdhesionId { get; set; }
 
-        [DataMember(Name = "request_result", EmitDefaultValue = false)]
-        public List<RequestResult> RequestResult { get; set; }
+        [JsonPropertyName("request_result")]
+        public List<RequestResult>? RequestResult { get; set; }
+
+        [JsonPropertyName("metadata")]
+        public JsonElement? Metadata { get; set; }
     }
 }

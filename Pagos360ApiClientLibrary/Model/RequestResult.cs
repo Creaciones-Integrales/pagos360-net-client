@@ -1,52 +1,55 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Pagos360ApiClientLibrary.Model
 {
-    [DataContract(Name = "request-result")]
     public class RequestResult
     {
-        public RequestResult() { }
+        [JsonPropertyName("id")]
+        public int? Id { get; set; }
 
-        [DataMember(Name = "id", EmitDefaultValue = false)]
-        public int Id { get; set; }
+        [JsonPropertyName("type")]
+        public string? Type { get; set; }
 
-        [DataMember(Name = "type", EmitDefaultValue = false)]
-        public string Type { get; set; }
+        [JsonPropertyName("channel")]
+        public string? Channel { get; set; }
 
-        [DataMember(Name = "channel", EmitDefaultValue = false)]
-        public string Channel { get; set; }
+        [JsonPropertyName("paid_at")]
+        public DateTime? PaidAt { get; set; }
 
-        [DataMember(Name = "paid_at", EmitDefaultValue = false)]
-        public string PaidAt { get; set; }
+        [JsonPropertyName("created_at")]
+        public DateTime? CreatedAt { get; set; }
 
-        [DataMember(Name = "created_at", EmitDefaultValue = false)]
-        public string CreatedAt { get; set; }
+        [JsonPropertyName("available_at")]
+        public DateTime? AvailableAt { get; set; }
 
-        [DataMember(Name = "available_at", EmitDefaultValue = false)]
-        public string AvailableAt { get; set; }
+        [JsonPropertyName("rejected_at")]
+        public DateTime? RejectedAt { get; set; }
 
-        [DataMember(Name = "rejected_at", EmitDefaultValue = false)]
-        public string RejectedAt { get; set; }
+        [JsonPropertyName("is_available")]
+        public bool? IsAvailable { get; set; }
 
-        [DataMember(Name = "is_available", EmitDefaultValue = false)]
-        public bool IsAvaliable { get; set; }
+        [JsonPropertyName("amount")]
+        public float? Amount { get; set; }
 
-        [DataMember(Name = "amount", EmitDefaultValue = false)]
-        public double Amount { get; set; }
+        [JsonPropertyName("gross_fee")]
+        public float? GrossFee { get; set; }
 
-        [DataMember(Name = "gross_fee", EmitDefaultValue = false)]
-        public double GrossFee { get; set; }
+        [JsonPropertyName("net_fee")]
+        public float? NetFee { get; set; }
 
-        [DataMember(Name = "net_fee", EmitDefaultValue = false)]
-        public double NetFee { get; set; }
+        [JsonPropertyName("fee_iva")]
+        public float? FeeIva { get; set; }
 
-        [DataMember(Name = "fee_iva", EmitDefaultValue = false)]
-        public double FeeIva { get; set; }
+        [JsonPropertyName("net_amount")]
+        public float? NetAmount { get; set; }
 
-        [DataMember(Name = "net_amount", EmitDefaultValue = false)]
-        public double NetAmount { get; set; }
+        [JsonPropertyName("state_comment")]
+        public string? StateComment { get; set; }
 
-        [DataMember(Name = "state_comment", EmitDefaultValue = false)]
-        public string StateComment { get; set; }
+        [JsonPropertyName("retentions")]
+        public List<object>? Retentions { get; set; }
     }
 }

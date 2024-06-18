@@ -3,16 +3,17 @@ using Pagos360ApiClientLibrary.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks; // Ensure this is added for Task
 
 namespace Pagos360ApiClientLibrary.Resources
 {
     public class CardDebitRequests
     {
-        public static PaginationResult<CardDebitRequest> ListDebitRequests(string pPath, string pAPIKey)
+        public static async Task<PaginationResult<CardDebitRequest>> ListDebitRequestsAsync(string pPath, string pAPIKey)
         {
             try
             {
-                return ApiRestServices.ListObjects<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey);
+                return await ApiRestServices.ListObjectsAsync<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey);
             }
             catch (ApplicationException ae)
             {
@@ -20,11 +21,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static PaginationResult<CardDebitRequest> ListDebitRequests(string pPath, string pAPIKey, string pExternalReference)
+        public static async Task<PaginationResult<CardDebitRequest>> ListDebitRequestsAsync(string pPath, string pAPIKey, string pExternalReference)
         {
             try
             {
-                return ApiRestServices.ListObjects<CardDebitRequest>(pPath + "/card-debit-request?external_reference=" + pExternalReference, pAPIKey);
+                return await ApiRestServices.ListObjectsAsync<CardDebitRequest>(pPath + "/card-debit-request?external_reference=" + pExternalReference, pAPIKey);
             }
             catch (ApplicationException ae)
             {
@@ -32,11 +33,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static CardDebitRequest CreateDebitRequest(string pPath, string pAPIKey, CardDebitRequest pDebitRequest)
+        public static async Task<CardDebitRequest> CreateDebitRequestAsync(string pPath, string pAPIKey, CardDebitRequest pDebitRequest)
         {
             try
             {
-                return ApiRestServices.CreateObject<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, "card_debit_request", pDebitRequest);
+                return await ApiRestServices.CreateObjectAsync<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, "card_debit_request", pDebitRequest);
             }
             catch (ApplicationException ae)
             {
@@ -44,11 +45,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static CardDebitRequest GetCardDebitRequest(string pPath, string pAPIKey, int pId)
+        public static async Task<CardDebitRequest> GetCardDebitRequestAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.GetObject<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, pId);
+                return await ApiRestServices.GetObjectAsync<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {
@@ -56,11 +57,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static CardDebitRequest CancelDebitRequest(string pPath, string pAPIKey, int pId)
+        public static async Task<CardDebitRequest> CancelDebitRequestAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.CancelObject<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, pId);
+                return await ApiRestServices.CancelObjectAsync<CardDebitRequest>(pPath + "/card-debit-request", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {

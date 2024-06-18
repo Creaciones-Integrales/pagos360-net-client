@@ -1,20 +1,15 @@
 ﻿using Pagos360ApiClientLibrary.Model;
 using Pagos360ApiClientLibrary.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pagos360ApiClientLibrary.Resources
 {
     public class Adhesions
     {
-        public static PaginationResult<Adhesion> ListAdhesions(string pPath, string pParam, string pAPIKey)
+        public static async Task<PaginationResult<Adhesion>> ListAdhesionsAsync(string pPath, string pParam, string pAPIKey)
         {
             try
             {
-                return ApiRestServices.ListObjects<Adhesion>(pPath + "/adhesion" + pParam, pAPIKey);
+                return await ApiRestServices.ListObjectsAsync<Adhesion>(pPath + "/adhesion" + pParam, pAPIKey);
             }
             catch (ApplicationException ae)
             {
@@ -22,12 +17,12 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static Adhesion CreateAdhesion(string pPath, string pAPIKey, Adhesion pAdhesion, bool pAutoSign)
+        public static async Task<Adhesion> CreateAdhesionAsync(string pPath, string pAPIKey, Adhesion pAdhesion, bool pAutoSign)
         {
             try
             {
-                string autoSign = "";
-                return ApiRestServices.CreateObject<Adhesion>(pPath + "/adhesion" + autoSign, pAPIKey, "adhesion", pAdhesion);
+                string autoSign = pAutoSign ? "?auto_sign=true" : "";
+                return await ApiRestServices.CreateObjectAsync<Adhesion>(pPath + "/adhesion" + autoSign, pAPIKey, "adhesion", pAdhesion);
             }
             catch (ApplicationException ae)
             {
@@ -35,11 +30,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static Adhesion GetAdhesion(string pPath, string pAPIKey, int pId)
+        public static async Task<Adhesion> GetAdhesionAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.GetObject<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
+                return await ApiRestServices.GetObjectAsync<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {
@@ -47,11 +42,11 @@ namespace Pagos360ApiClientLibrary.Resources
             }
         }
 
-        public static Adhesion CancelAdhesion(string pPath, string pAPIKey, int pId)
+        public static async Task<Adhesion> CancelAdhesionAsync(string pPath, string pAPIKey, int pId)
         {
             try
             {
-                return ApiRestServices.CancelObject<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
+                return await ApiRestServices.CancelObjectAsync<Adhesion>(pPath + "/adhesion", pAPIKey, pId);
             }
             catch (ApplicationException ae)
             {
