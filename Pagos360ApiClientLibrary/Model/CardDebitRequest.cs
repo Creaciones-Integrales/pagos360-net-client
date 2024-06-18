@@ -15,7 +15,7 @@ namespace Pagos360ApiClientLibrary.Model
         public required float Amount { get; set; }
 
         [JsonPropertyName("card_adhesion_id")]
-        public required int CardAdhesionId { get; set; }
+        public int? CardAdhesionId { get; set; }
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }

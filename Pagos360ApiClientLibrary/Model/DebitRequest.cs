@@ -42,7 +42,7 @@ namespace Pagos360ApiClientLibrary.Model
         public Adhesion? Adhesion { get; set; }
 
         [JsonPropertyName("adhesion_id")]
-        public required int AdhesionId { get; set; }
+        public int? AdhesionId { get; set; }
 
         [JsonPropertyName("request_result")]
         public List<RequestResult>? RequestResult { get; set; }
